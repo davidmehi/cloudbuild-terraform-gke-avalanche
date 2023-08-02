@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: avalanche-fullnode-rpc-service
+spec:
+  selector:
+    app: avalanche-fullnode
+  ports:
+    - protocol: TCP
+      port: 30650
+      targetPort: 30650
+      name: rpc
+  type: LoadBalancer

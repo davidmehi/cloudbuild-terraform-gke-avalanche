@@ -1,0 +1,19 @@
+# cloudbuild.yaml
+
+steps:
+  - id: 'terraform init'
+    name: 'hashicorp/terraform:1.5.4'
+    script: terraform init
+  - id: 'terraform plan'
+    name: 'hashicorp/terraform:1.5.4'
+    script: terraform plan
+  - id: 'terraform apply'
+    name: 'hashicorp/terraform:1.5.4'
+    script: terraform apply --auto-approve
+  - id: 'deploy node'
+    name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+    - run
+    - --filename=gke/
+    - --location=us-central1-a
+    - --cluster=avalanche-default-cluster

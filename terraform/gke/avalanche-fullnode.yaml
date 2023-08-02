@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: avalanche-fullnode
+  labels:
+    app.kubernetes.io/name: avalanche-fullnode
+    app.kubernetes.io/instance: avalanche-fullnode-testnet
+    app.kubernetes.io/version: "latest"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: avalanche-fullnode
+      app.kubernetes.io/instance: avalanche-fullnode-testnet
+  serviceName: avalanche-fullnode-testnet
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /ext/metrics
+        prometheus.io/port: "30650"
+      labels:
+        app.kubernetes.io/name: avalanche-fullnode
+        app.kubernetes.io/instance: avalanche-fullnode-testnet
+        app: avalanche-fullnode
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: avalanche-fullnode
+          securityContext:
+            {}
+          image: "avaplatform/avalanchego:v1.10.5"
+          imagePullPolicy: IfNotPresent
+          command:
+          - bash
+          - -c
+          - |
+            exec /avalanchego/build/avalanchego --network-id=fuji --http-port=30650 --http-host= --http-allowed-hosts=*
+          ports:
+          - containerPort: 30650
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /home/user/data/
+            name: avalanche-storage
+      volumes:
+        - name: avalanche-storage
+          persistentVolumeClaim:
+            claimName: avalanche-fullnode-storage
+

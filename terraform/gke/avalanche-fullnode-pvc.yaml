@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: avalanche-fullnode-storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2.5Ti
+  storageClassName: premium-rwo       # SSD storage class for GCP/GKE

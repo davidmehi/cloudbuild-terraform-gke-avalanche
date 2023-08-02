@@ -1,0 +1,15 @@
+# cloudbuild-destroy.yaml
+
+steps:
+  #- id: 'remove node'
+  #  name: 'gcr.io/cloud-builders/kubectl'
+  #  args: ['delete', '-f', 'gke/']
+  #  env:
+  #  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  #  - 'CLOUDSDK_CONTAINER_CLUSTER=avalanche-default-cluster'
+  - id: 'terraform init'
+    name: 'hashicorp/terraform:1.5.4'
+    script: terraform init
+  - id: 'terraform destroy'
+    name: 'hashicorp/terraform:1.5.4'
+    script: terraform destroy --auto-approve
